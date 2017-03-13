@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/darker_gray">
 
     <com.ilyaeremin.diagonallayout.DiagonalLayout
         android:layout_width="match_parent"
@@ -12,82 +13,75 @@
         >
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l1123123123"
-            app:layout_position="left" />
+            android:text="1"
+            />
 
         <TextView
+            style="@style/diagonal_block"
+            android:layout_width="wrap_content"
+            android:text="2 super wide view"
+            />
+
+        <TextView
+            style="@style/diagonal_block"
+            android:layout_width="wrap_content"
+            android:text="3"
+            />
+
+        <TextView
+            style="@style/diagonal_block"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="4"
             />
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="5"
             />
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="6"
             />
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="7"
             />
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="8"
             />
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="9"
             />
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="10"
             />
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="11"
             />
 
         <TextView
+            style="@style/diagonal_block"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_red_light"
-            android:text="l2123123123"
-            app:layout_position="left"
+            android:text="12"
             />
 
     </com.ilyaeremin.diagonallayout.DiagonalLayout>
