@@ -3,11 +3,15 @@ package com.ilyaeremin.diagonallayout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.annotation.IntDef;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by ereminilya on 27/2/17.
@@ -15,7 +19,15 @@ import android.view.ViewGroup;
 
 public class DiagonalLayout extends ViewGroup {
 
-    int parentWidth;
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({DIRECTION_LEFT_TO_RIGHT, DIRECTION_RIGHT_TO_LEFT})
+    public @interface Direction {
+    }
+
+    private static final int DIRECTION_LEFT_TO_RIGHT = 1;
+    private static final int DIRECTION_RIGHT_TO_LEFT = -1;
+
+    private int parentWidth;
 
     public DiagonalLayout(Context context) {
         super(context);
@@ -44,37 +56,28 @@ public class DiagonalLayout extends ViewGroup {
 
     @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int count = getChildCount();
-
-
-        // Measurement will ultimately be computing these values.
-        int maxHeight = 0;
-
-        direction = 1;
-        edge = 0;
-        bottomOfLastChild = 0;
+        int viewHeight = 0;
         parentWidth = 0;
-
-        // Iterate through all children, measuring them and computing our dimensions
-        // from their size.
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
-                // Measure the child.
+                // measure childrens and calculate all childers' height
                 measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
-                maxHeight += child.getMeasuredHeight();
+                viewHeight += child.getMeasuredHeight();
             }
         }
         parentWidth = MeasureSpec.getSize(widthMeasureSpec);
-
-        setMeasuredDimension(parentWidth, maxHeight);
+        setMeasuredDimension(parentWidth, viewHeight);
     }
-
-    int direction         = 1;
-    int edge              = 0;
-    int bottomOfLastChild = 0;
 
     @Override protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         final int count = getChildCount();
+        /**
+         * depends on layout filling direction this is left or right edge of the current child
+         */
+        int childEdge = 0;
+        int bottomOfLastChild = 0;
+        @Direction int direction = DIRECTION_LEFT_TO_RIGHT;
 
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
@@ -88,30 +91,30 @@ public class DiagonalLayout extends ViewGroup {
                 int childRight;
                 int childBottom;
                 if (width == parentWidth) {
-                    if (direction > 0) {
-                        edge = right;
+                    if (direction == DIRECTION_LEFT_TO_RIGHT) {
+                        childEdge = right;
                     } else {
-                        edge = 0;
+                        childEdge = 0;
                     }
                     childLeft = left;
                     childRight = right;
-                    direction *= -1;
+                    direction = opositeDirection(direction);
                 } else {
-                    if (direction > 0 && edge + width > right) {
-                        direction = -1;
-                        edge = right;
-                    } else if (direction < 0 && edge - width < 0) {
-                        direction = 1;
-                        edge = 0;
+                    if (direction == DIRECTION_LEFT_TO_RIGHT && childEdge + width > right) {
+                        direction = opositeDirection(direction);
+                        childEdge = right;
+                    } else if (direction == DIRECTION_RIGHT_TO_LEFT && childEdge - width < 0) {
+                        direction = opositeDirection(direction);
+                        childEdge = 0;
                     }
-                    if (direction > 0) {
-                        childLeft = edge;
-                        childRight = edge + width;
-                        edge += width;
+                    if (direction == DIRECTION_LEFT_TO_RIGHT) {
+                        childLeft = childEdge;
+                        childRight = childEdge + width;
+                        childEdge += width;
                     } else {
-                        childRight = edge;
-                        childLeft = edge - width;
-                        edge -= width;
+                        childRight = childEdge;
+                        childLeft = childEdge - width;
+                        childEdge -= width;
                     }
                 }
                 childBottom = childTop + getPaddingTop() + height;
@@ -123,10 +126,9 @@ public class DiagonalLayout extends ViewGroup {
         }
     }
 
-    // ----------------------------------------------------------------------
-    // The rest of the implementation is for custom per-child layout parameters.
-    // If you do not need these (for example you are writing a layout manager
-    // that does fixed positioning of its children), you can drop all of this.
+    @Direction private int opositeDirection(@Direction int direction) {
+        return direction == DIRECTION_LEFT_TO_RIGHT ? DIRECTION_RIGHT_TO_LEFT : DIRECTION_LEFT_TO_RIGHT;
+    }
 
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
@@ -157,8 +159,6 @@ public class DiagonalLayout extends ViewGroup {
         public int gravity = Gravity.TOP | Gravity.START;
 
         public static int POSITION_MIDDLE = 0;
-        public static int POSITION_LEFT   = 1;
-        public static int POSITION_RIGHT  = 2;
 
         public int position = POSITION_MIDDLE;
 
@@ -182,5 +182,4 @@ public class DiagonalLayout extends ViewGroup {
             super(source);
         }
     }
-
 }
